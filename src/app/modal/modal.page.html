@@ -1,0 +1,8 @@
+<ion-app class="main modal">
+  <ion-header class="ion-padding header">
+    <ion-input autofocus="true" inputmode="text" mode="md" (ionChange)="changeCity($event)" [(ngModel)]="citySelected"></ion-input>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-item *ngFor="let city of filteredCities" (click)="selectCity(city)">{{city}}</ion-item>
+  </ion-content>
+</ion-app>

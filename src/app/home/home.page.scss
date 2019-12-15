@@ -1,1 +1,143 @@
+.main {
+  --ion-background-color: #7290B9;
+  font-family: 'Lato', serif;
+  color: #ffffff;
+}
 
+.tempType {
+  box-sizing: border-box;
+  font-size: 18px;
+  line-height: 22px;
+
+  ion-segment-button {
+    --background: #7290B9;
+    --background-activated: rgba(255, 255, 255, 0.4);
+    --background-checked: rgba(255, 255, 255, 0.4);
+    --background-hover: rgba(255, 255, 255, 0.4);
+    --border-color: rgba(255, 255, 255, 0.4);
+    --border-radius: 8px;
+    --border-style: solid;
+    --border-width: 1px;
+    --color: rgba(255, 255, 255, 0.4);
+    --color-activated: rgba(255, 255, 255, 1);
+    --color-checked: rgba(255, 255, 255, 1);
+    --indicator-color: transparent;
+    --indicator-color-checked: transparent;
+    --margin-bottom: 0;
+    --margin-top: 0;
+    --margin-start: 0;
+    --margin-end: 0;
+    --padding-bottom: 0;
+    --padding-top: 0;
+    --padding-start: 0;
+    --padding-end: 0;
+
+    min-height: 30px;
+    height: 30px;
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+
+    &:first-child {
+      border-right-width: 0;
+    }
+
+    &:last-child {
+      border-left-width: 0;
+    }
+  }
+
+  .isSelected {
+    ion-label {
+      font-weight: bold;
+    }
+  }
+
+  .degree-mark {
+    font-size: 18px;
+    line-height: 23px;
+    display: inline-block;
+    margin-right: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    padding-top: 5px;
+  }
+}
+
+.city {
+  font-size: 30px;
+  line-height: 36px;
+}
+
+.header {
+  background: #7290B9;
+
+  &:after {
+    background-image: none;
+  }
+}
+
+.action-location {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 15px;
+  line-height: 18px;
+  display: flex;
+
+  span {
+    padding-right: 30px;
+  }
+
+  div {
+    position: relative;
+    padding-left: 30px;
+  }
+
+  img {
+    position: absolute;
+    left: 0;
+    top: -7px;
+  }
+}
+
+.footer {
+  background: #7290B9;
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: bold;
+
+  &:before {
+    background-image: none;
+  }
+
+  .caption {
+    font-size: 15px;
+    line-height: 18px;
+    font-weight: normal;
+    display: block;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  ion-row {
+    margin-bottom: 35px;
+  }
+}
+
+.content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  ion-row {
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 22px;
+    font-family: 'PT Sans', serif;
+
+    &:first-child {
+      font-size: 80px;
+      line-height: 90px;
+    }
+  }
+}
