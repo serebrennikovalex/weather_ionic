@@ -1,5 +1,5 @@
-import { Component, AfterViewInit } from '@angular/core'
-import { ModalController } from '@ionic/angular';
+import { Component, AfterViewInit } from '@angular/core';
+import { ModalController, NavController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { WeatherService, responseWeatherByCoordinate } from '../services/weather.service';
 import { ModalPage} from '../modal/modal.page';
@@ -35,7 +35,12 @@ export class HomePage implements AfterViewInit {
 
   tempType: 'celsius' | 'fahrenheit' = 'celsius';
 
-  constructor(private geolocation: Geolocation, private weatherService: WeatherService, private modalCtrl: ModalController) {}
+  constructor(
+      private geolocation: Geolocation,
+      private weatherService: WeatherService,
+      private modalCtrl: ModalController,
+      private navCtrl: NavController
+  ) {}
 
   async openModal() {
     const modal = await this.modalCtrl.create({
@@ -44,7 +49,7 @@ export class HomePage implements AfterViewInit {
             cities: this.cities.map(obj => obj.name)
         }
     });
-    modal.onWillDismiss().then(d => this.handleModalDismiss(d))
+    modal.onWillDismiss().then(d => this.handleModalDismiss(d));
 
     return await modal.present();
   }
@@ -58,14 +63,18 @@ export class HomePage implements AfterViewInit {
   }
 
   getCurrentGeoLocation() {
-      this.geolocation.getCurrentPosition().then(res => {
+      this.geolocation.getCurrentPosition({timeout: 5000, enableHighAccuracy: true, maximumAge: 0}).then(res => {
           const { coords } = res;
 
           this.weatherService
               .getWeatherByCoordinates(coords.latitude, coords.longitude)
-              .subscribe((data: responseWeatherByCoordinate) => this.updateWeather(data));
-      }).catch(err => {
-          console.log('err -> ', err);
+              .subscribe((data: responseWeatherByCoordinate) => {
+                  this.updateWeather(data);
+              }, error => {
+                  this.navCtrl.navigateForward('/error', {queryParams: {error: JSON.stringify(error)}}).then();
+              });
+      }).catch(error => {
+          this.navCtrl.navigateForward('/error', {queryParams: {error: JSON.stringify(error)}}).then();
       });
   }
 
@@ -103,5 +112,4 @@ export class HomePage implements AfterViewInit {
   handleModalDismiss(d) {
       this.getWeatherByCity(d.data);
   }
-
 }
