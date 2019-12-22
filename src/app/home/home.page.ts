@@ -15,7 +15,10 @@ export class HomePage implements AfterViewInit {
   weather: {
       city: string
       temp: number
-      wind: number
+      wind: {
+        speed: number
+        deg: number
+      }
       pressure: number
       humidity: number
       rain: number
@@ -23,7 +26,10 @@ export class HomePage implements AfterViewInit {
   } = {
       city: '',
       temp: 0,
-      wind: 0,
+      wind: {
+        speed: 0,
+        deg: 0
+      },
       pressure: 0,
       humidity: 0,
       rain: 0,
@@ -98,11 +104,35 @@ export class HomePage implements AfterViewInit {
           .subscribe((data: responseWeatherByCoordinate) => this.updateWeather(data));
   }
 
+  getWindDirection(deg) {
+      let result = '';
+
+      if (deg === 0 || deg === 360) {
+          result = 'северный';
+      } else if (deg > 0 && deg < 90) {
+          result = 'северо-восточный';
+      } else if (deg === 90) {
+          result = 'восточный';
+      } else if (deg > 90 && deg < 180) {
+          result = 'юго-восточный';
+      } else if (deg === 180) {
+          result = 'южный';
+      } else if (deg > 180 && deg < 270) {
+          result = 'юго-западный';
+      } else if (deg === 270) {
+          result = 'западный';
+      } else if (deg > 270 && deg < 360) {
+          result = 'северо-западный';
+      }
+
+      return result;
+  }
+
   updateWeather(data: responseWeatherByCoordinate) {
       this.weather = {
           city: data.name,
           temp: Math.floor(data.main.temp - tempCelsiusInKelvin),
-          wind: data.wind.speed,
+          wind: data.wind,
           pressure: data.main.pressure,
           humidity: data.main.humidity,
           rain: data.rain && data.rain['1h'] || 0,
