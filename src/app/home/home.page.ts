@@ -1,6 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { WeatherService, responseWeatherByCoordinate } from '../services/weather.service';
 import { ModalPage} from '../modal/modal.page';
 
@@ -36,7 +35,6 @@ export class HomePage implements AfterViewInit {
   tempType: 'celsius' | 'fahrenheit' = 'celsius';
 
   constructor(
-      private geolocation: Geolocation,
       private weatherService: WeatherService,
       private modalCtrl: ModalController,
       private navCtrl: NavController
@@ -63,19 +61,22 @@ export class HomePage implements AfterViewInit {
   }
 
   getCurrentGeoLocation() {
-      this.geolocation.getCurrentPosition({timeout: 5000, enableHighAccuracy: true, maximumAge: 0}).then(res => {
-          const { coords } = res;
-
+      this.getPosition().then(result => {
           this.weatherService
-              .getWeatherByCoordinates(coords.latitude, coords.longitude)
+              .getWeatherByCoordinates(result.lat, result.lng)
               .subscribe((data: responseWeatherByCoordinate) => {
                   this.updateWeather(data);
-              }, error => {
-                  this.navCtrl.navigateForward('/error', {queryParams: {error: JSON.stringify(error)}}).then();
-              });
-      }).catch(error => {
-          this.navCtrl.navigateForward('/error', {queryParams: {error: JSON.stringify(error)}}).then();
-      });
+              }, () => this.navCtrl.navigateForward('/error'));
+      }).catch(() => this.navCtrl.navigateForward('/error'));
+  }
+
+  getPosition(): Promise<any> {
+    return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition((position) => {
+                resolve({lng: position.coords.longitude, lat: position.coords.latitude});
+            },
+            err => reject(err));
+    });
   }
 
   getAllCities() {
